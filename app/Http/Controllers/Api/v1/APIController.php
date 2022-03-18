@@ -18,7 +18,7 @@ class APIController extends Controller
      *  {"passport": {}},
      *   },
      *      summary="Get list of users",
-     *      description="Returns list of users",
+     *      description="Returned list of users",
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",

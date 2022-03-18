@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'Vimepay Management APp',
+                'title' => 'Estate Intel API Documentation',
             ],
 
             'routes' => [

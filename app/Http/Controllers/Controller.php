@@ -28,8 +28,8 @@ use Illuminate\Routing\Controller as BaseController;
 
      *
      * @OA\Tag(
-     *     name="Projects",
-     *     description="API Endpoints of Projects"
+     *     name="Trades",
+     *     description="API Endpoints of Trades department"
      * )
 */
 class Controller extends BaseController
