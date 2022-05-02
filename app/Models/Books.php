@@ -16,8 +16,4 @@ class Books extends Model
         'authors' => 'array',
     ];
 
-    // public function setAuthorsAttribute($value)
-    // {
-    //     $this->attributes['authors'] = implode(',',$value);
-    // }
 }

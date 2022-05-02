@@ -7,21 +7,22 @@ use App\Http\Resources\BooksResource;
 use App\Models\Books;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use GuzzleHttp\Client as client;
 
 class BooksController extends Controller
 {
-        /**
+    /**
      * @OA\Post(
-     *      path="/v1/trades/all",
-     *      operationId="getAllTrades",
-     *      tags={"Trades"},
+     *      path="/v1/books/create",
+     *      operationId="storeNewBook",
+     *      tags={"Books"},
      * security={
      *  {"passport": {}},
      *   },
-     *      summary="Get All trades",
-     *      description="Returns list of all available trades",
+     *      summary="Stores a new book",
+     *      description="Stores a new book",
      *      @OA\Response(
-     *          response=200,
+     *          response=201,
      *          description="Successful operation",
      *          @OA\MediaType(
      *           mediaType="application/json",
@@ -53,17 +54,22 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function fetch_all_books()
+    public function fetch_all_books(Request $request)
     {
-        $books = BooksResource::collection(Books::all());
-
-        if ($books) {
-            $status_code = Response::HTTP_OK;
-            $status = "success";
+        $search_params = $request['search'];
+        if($search_params) {
+            $books = BooksResource::collection((Books::where('name', 'like' ,'%'.$search_params.'%')
+                                                ->orWhere('country', 'like','%'.$search_params.'%')
+                                                ->orWhere('publisher', 'like','%'.$search_params.'%')
+                                                ->orWhere('release_date', 'like','%'.$search_params.'%')
+                                                ->get()));
         } else {
-            $status_code = Response::HTTP_NOT_FOUND;
-            $status = "failed";
+            $books = BooksResource::collection(Books::all());
         }
+    
+        $status_code = Response::HTTP_OK;
+        $status = "success";
+        
         return response()->json([
             'status_code' => $status_code,
             'status' => $status,
@@ -93,10 +99,10 @@ class BooksController extends Controller
         $book = new BooksResource(Books::create($book_data));
 
         if ($book) {
-            $status_code = Response::HTTP_OK;
+            $status_code = Response::HTTP_CREATED;
             $status = "success";
         } else {
-            $status_code = Response::HTTP_NOT_FOUND;
+            $status_code = Response::HTTP_UNAUTHORIZED;
             $status = "failed";
         }
 
@@ -116,25 +122,22 @@ class BooksController extends Controller
      */
     public function update_book(Request $request, $id)
     {
-        // $book = Books::where('id', $id)->first();
         $book = new BooksResource(Books::findOrFail($id));
         $input = $request->all();
+        $book_name = $book['name']; 
         
 
         $book->fill($input)->save();
 
-        if ($book) {
-            $status_code = Response::HTTP_OK;
-            $status = "success";
-        } else {
-            $status_code = Response::HTTP_NOT_FOUND;
-            $status = "failed";
-        }
+
+        $status_code = Response::HTTP_OK;
+        $status = "success";
+
 
         return response()->json([
             'status_code' => $status_code,
             'status' => $status,
-            "message" => "The book My First Book was updated successfully",
+            "message" => "The book $book_name was updated successfully",
             'data' => $book
 
         ]);
@@ -149,9 +152,10 @@ class BooksController extends Controller
      */
     public function show_book($books)
     {
-        $book = new BooksResource(Books::findOrFail($books));
+        $fetch_book = Books::findOrFail($books);
+        $book = new BooksResource($fetch_book);
 
-        if ($book) {
+        if ($fetch_book) {
             $status_code = Response::HTTP_OK;
             $status = "success";
         } else {
@@ -179,17 +183,16 @@ class BooksController extends Controller
         
         $book = new BooksResource(Books::findOrFail($books));
 
-        // return $book;
 
         if ($book) {
-            $status_code = Response::HTTP_OK;
+            $status_code = Response::HTTP_NO_CONTENT;
             $status = "success";
             $book_name = $book['name'];
 
             $book->delete();
         } else {
             $status_code = Response::HTTP_NOT_FOUND;
-            $status = "failed";
+            $status = "Book not found";
         }
 
         return response()->json([
@@ -198,5 +201,33 @@ class BooksController extends Controller
             "message" => "The book $book_name was deleted successfully",
 
         ]);
+    }
+
+    public function fetch_external_api(Request $request)
+    {
+        $books_filter_url = env('API_BASE_URL').'?name='.$request['name'];
+
+        $client = new client();
+        $response = $client->request('GET', $books_filter_url);
+        ;
+        $responseBody = json_decode($response->getBody(), true);
+
+        $data = new BooksCollection($responseBody);
+        if ($responseBody != null) {
+            $status_code = Response::HTTP_OK;
+            $status = "success";
+
+        } else {
+            $status_code = Response::HTTP_NOT_FOUND;
+            $status = "not found";
+        }
+
+        return response()->json([
+            'status_code' => $status_code,
+            'status' => $status,
+            "data" => $data,
+
+        ]);
+
     }
 }

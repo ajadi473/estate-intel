@@ -14,7 +14,22 @@ class BooksCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
-        
+        return [ 
+            $this->collection->map(function($data) {
+                return [
+                    'name' => $data['name'],
+                    'isbn' => $data['isbn'],
+                    'authors' => [
+                        $data['authors'],
+                    ],
+                    'number_of_pages' => $data['numberOfPages'],
+                    'publisher' => $data['publisher'],
+                    'country' => $data['country'],
+                    'release_date' => $data['released'],
+
+                    
+                ];
+            })
+        ];
     }
 }
