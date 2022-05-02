@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\BooksController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TradesControllerController;
+use App\Models\Books;
 use App\Models\login;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,9 +29,9 @@ Route::group([
 
     // fetch featured products for the homepage
     Route::get('all-books', function() {
-        $users = User::all();
+        $books = Books::all();
 
-        return response()->json($users);
+        return response()->json($books);
     });
 
     
@@ -37,25 +39,23 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'v1/offer',
+    'prefix' => 'v1/books',
     'as' => 'api.',
 ], function () {
 
-    Route::post('/all', [TradesControllerController::class, 'fetch_offers']);
-    Route::post('', [TradesControllerController::class, 'fetch_an_offer']);
-    Route::post('/create', [TradesControllerController::class, 'create_an_offer']);
-    Route::post('/created/list', [TradesControllerController::class, 'list_created_offers']);
+    Route::get('', [BooksController::class, 'fetch_all_books']);
+    Route::post('/create', [BooksController::class, 'create_book']);
+    Route::patch('/update/{id}', [BooksController::class, 'update_book']);
+    Route::delete('/delete/{id}', [BooksController::class, 'destroy_book']);
+    Route::get('{id}', [BooksController::class, 'show_book']);
 });
 
 Route::group([
-    'prefix' => 'v1/trade',
+    'prefix' => 'v1/external-books',
     'as' => 'api.',
 ], function () {
 
-    Route::get('/all', [TradesControllerController::class, 'index']);
-    Route::post('/get', [TradesControllerController::class, 'fetch_a_trade']);
-    Route::post('/start', [TradesControllerController::class, 'start_trade']);
-    Route::post('/completed', [TradesControllerController::class, 'fetch_completed_trade']);
+    Route::get('/all', [BooksController::class, 'index']);
 
 });
 

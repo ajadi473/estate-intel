@@ -29,12 +29,107 @@
         }
     ],
     "paths": {
-        "/v1/all-books": {
+        "/v1/books/create": {
             "post": {
                 "tags": [
                     "Books"
                 ],
-                "summary": "Get list of all books",
+                "summary": "Locally Stores a new book",
+                "description": "Store new book",
+                "operationId": "storeBook",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "parameters" :[
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book name"
+                    },
+                    {
+                        "name": "isbn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "International Standard Book Number (ISBN)"
+                    },
+                    {
+                        "name": "authors",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book Authors (If many, separate with ,)"
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book country"
+                    },
+                    {
+                        "name": "number_of_pages",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Book pages"
+                    },
+                    {
+                        "name": "publisher",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book publisher"
+                    },
+                    {
+                        "name": "release_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Date book was released"
+                    }
+                ]
+            }
+        },
+        "/v1/books": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Get list of all locally stored books",
                 "description": "Returns list of all books",
                 "operationId": "getBooksList",
                 "responses": {
@@ -64,49 +159,160 @@
                 ]
             }
         },
-        "/v1/trade/all": {
+        "/v1/books/update/{id}": {
+            "patch": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Updated locally Stored  book",
+                "description": "Update book",
+                "operationId": "updateBook",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "parameters" :[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Book id"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book name"
+                    },
+                    {
+                        "name": "isbn",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "International Standard Book Number (ISBN)"
+                    },
+                    {
+                        "name": "authors",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book Authors (If many, separate with ,)"
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book country"
+                    },
+                    {
+                        "name": "number_of_pages",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Book pages"
+                    },
+                    {
+                        "name": "publisher",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Book publisher"
+                    },
+                    {
+                        "name": "release_date",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Date book was released"
+                    }
+
+                ]
+            }
+        },
+        "/v1/books/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Deletes locally Stored  book",
+                "description": "Delete book",
+                "operationId": "deleteBook",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "parameters" :[
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Book id"
+                    }
+                ]
+            }
+        },
+        "/v1/books/{id}": {
             "get": {
                 "tags": [
                     "Books"
                 ],
-                "summary": "Get list of all available trades",
-                "description": "Returns list of all trades",
-                "operationId": "getTradesList",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
-            }
-        },
-        "/v1/trade/get": {
-            "post": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Get trade by trade hash",
-                "description": "Returns a trade by the hash. ",
-                "operationId": "getTradeByHash",
+                "summary": "Get list of a stored books",
+                "description": "Returns list of a book",
+                "operationId": "getStoredBook",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -129,452 +335,14 @@
                 },
                 "parameters" :[
                     {
-                        "name": "trade_hash",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "A hash (ID) of the trade."
-                    }
-                ]
-            }
-        },
-        "/v1/trade/start": {
-            "post": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Start trade",
-                "description": "Start trade",
-                "operationId": "startTrade",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "parameters" :[
-                    {
-                        "name": "offer_hash",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "A hash (ID) of an offer."
-                    },
-                    {
-                        "name": "crypto_amount",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Trade amount in cryptocurrency. For BTC trade in Satoshi, for ETH trade in GWEI, for USDT trade in micro cents (e.g 1 usdt = 1000000 micro cents)."
-                    },
-                    {
-                        "name": "fiat",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Trade amount in fiat currency."
-                    },
-                    {
-                        "name": "bank_accounts[to]",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Bank accounts that will be used for a given trade."
-                    }
-                ]
-            }
-        },
-        "/v1/trade/completed": {
-            "post": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Fetch completed trade",
-                "description": "Fetches completed trade",
-                "operationId": "fetchCompletedTrade",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "parameters" :[
-                    {
-                        "name": "page_number",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description": ""
-                    },
-                    {
-                        "name": "partner",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Username of a partner."
-                    }
-                ]
-            }
-        },
-        "/v1/offer/all": {
-            "post": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Get list of all available offers",
-                "description": "Returns list of all offers. ",
-                "operationId": "getOffers",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "parameters" :[
-                    {
-                        "name": "offer_type",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["sell", "buy"]
-                        },
-                        "description": "If you would like to get offers that you can use <b>to buy crypto</b>, and you need to see offers <b>where other vendors are selling crypto</b>,  you should specify 'buy' to get 'sell' offers and vice versa."
-                    },
-                    {
-                        "name": "type",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["sell", "buy"]
-                        },
-                        "description" : "Will return offers of given type without applying a domain logic that 'offer_type' filter has. If you specify 'sell' then offers with this type will be returned and so on. See also offer_type filter. Either 'offer_type' or 'type' filter needs to be provided. If 'offer_type' filter is provided then this filter will be ignored. Possible values: 'buy', 'sell'."
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description" : "How many offers to return."
-                    },
-                    {
-                        "name": "page_number",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description" : ""
-                    },
-                    {
-                        "name": "payment_method",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description" : "paypal/bank-transfer/moneygram/amazon-gift-card"
-                    },
-                    {
-                        "name": "currency_code",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description" : "3 letter ISO code for fiat currency. 'USD' or any other. Case insensitive."
-                    }
-                ],
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
-            }
-        },
-        "/v1/offer": {
-            "post": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Get list of an offer",
-                "description": "Returns list of an offer. ",
-                "operationId": "getOfferById",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "parameters" :[
-                    {
-                        "name": "offer_hash",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "A hash (ID) of the offer."
-                    }
-                ]
-            }
-        },
-        "/v1/offer/create": {
-            "post": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Create offer",
-                "description": "Creates an offer. ",
-                "operationId": "createOffer",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "parameters" :[
-                    {
-                        "name": "offer_type_field",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "An offer type. Possible values: 'buy', 'sell'."
-                    },
-                    {
-                        "name": "currency",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description" : "3 letter ISO code for fiat currency. 'USD' or any other. Case insensitive."
-                    },
-                    {
-                        "name": "payment_method",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description" : "paypal/bank-transfer/moneygram/amazon-gift-card"
-                    },
-                    {
-                        "name": "margin",
-                        "in": "query",
+                        "name": "id",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         },
-                        "description" : "A percent that determines differences between market price and the price of the offer."
-                    },
-                    {
-                        "name": "range_min",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 10
-                        },
-                        "description" : "A minimum value of the trade limit, i.e the smallest amount of fiat that a trade can be started with."
-                    },
-                    {
-                        "name": "range_max",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 10
-                        },
-                        "description" : "A maximum value of the trade limit, i.e the largest amount of fiat that a trade can be started with."
-                    },
-                    {
-                        "name": "payment_window",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 30,
-                            "maximum" : 43200
-                        },
-                        "description" : "How much time the trade partner has to make the payment and click 'Paid' before the trade is automatically canceled. Integer between 30 to 43200."
-                    },
-                    {
-                        "name": "offer_terms",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description" : "Terms of the offer for a trade partner. String up to 2500 characters."
-                    },
-                    {
-                        "name": "trade_details",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description" : "Instructions for a trade partner. String up to 2500 characters."
-                    },
-                    {
-                        "name": "crypto_currency",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description" : "e.g - btc, eth. If not set, then 'btc' will be used as a default."
+                        "description": "Book id"
                     }
-
-                    
-                ],
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
-            }
-        }
-        ,
-        "/v1/offer/created/list": {
-            "post": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Offers created",
-                "description": "List created offers. ",
-                "operationId": "listCreatesOffer",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "parameters" :[
-                    {
-                        "name": "offer_type",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["sell", "buy"]
-                        },
-                        "description": "An offer type. "
-                    },
-                    {
-                        "name": "active",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["false", "true"]
-                        },
-                        "description" : "A filter by active/not active offers, by default all offers are displayed."
-                    }                    
                 ],
                 "security": [
                     {
